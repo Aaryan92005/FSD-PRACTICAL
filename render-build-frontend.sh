@@ -3,15 +3,15 @@
 # Render Frontend Build Script
 echo "Starting frontend build for Render deployment..."
 
-# Navigate to frontend directory
-cd grocery-erp-frontend
-
-# Install dependencies
+# Install and build frontend
 echo "Installing frontend dependencies..."
-npm install
+npm install --prefix grocery-erp-frontend
 
-# Build the application
 echo "Building React application..."
-npm run build
+npm run build --prefix grocery-erp-frontend
+
+# Verify build directory exists
+echo "Verifying build directory..."
+ls -la grocery-erp-frontend/build/
 
 echo "Frontend build completed successfully!"
