@@ -29,7 +29,7 @@ services:
     name: grocery-erp-frontend
     env: static
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: cd grocery-erp-frontend && npm install && npm run build
     staticPublishPath: grocery-erp-frontend/build
     routes:
       - type: rewrite
