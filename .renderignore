@@ -1,5 +1,9 @@
 # Render ignore file - files and directories to exclude from deployment
 
+# Root package.json that causes install loops
+package.json
+package-lock.json
+
 # Development files
 .env.local
 .env.development

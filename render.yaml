@@ -4,8 +4,9 @@ services:
     name: grocery-erp-backend
     env: node
     plan: free
-    buildCommand: cd grocery-erp-backend && npm install
-    startCommand: cd grocery-erp-backend && npm start
+    rootDir: grocery-erp-backend
+    buildCommand: npm install
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -29,7 +30,7 @@ services:
     name: grocery-erp-frontend
     env: static
     plan: free
-    buildCommand: cd grocery-erp-frontend && npm install && npm run build
+    buildCommand: bash render-build-frontend.sh
     staticPublishPath: grocery-erp-frontend/build
     routes:
       - type: rewrite

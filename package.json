@@ -4,11 +4,10 @@
   "description": "Complete Grocery ERP System with React Frontend and Node.js Backend",
   "main": "index.js",
   "scripts": {
-    "install": "cd grocery-erp-frontend && npm install",
-    "build": "npm run build:frontend",
-    "start": "npm run start:frontend",
-    "install:backend": "cd grocery-erp-backend && npm install",
-    "install:frontend": "cd grocery-erp-frontend && npm install",
+    "build": "echo 'Use service-specific build commands'",
+    "start": "echo 'Use service-specific start commands'",
+    "install:backend": "npm install --prefix grocery-erp-backend",
+    "install:frontend": "npm install --prefix grocery-erp-frontend",
     "install:all": "npm run install:backend && npm run install:frontend",
     "build:backend": "cd grocery-erp-backend && npm run build",
     "build:frontend": "cd grocery-erp-frontend && npm run build",
@@ -21,7 +20,8 @@
     "test:frontend": "cd grocery-erp-frontend && npm test",
     "test:all": "npm run test:backend && npm run test:frontend",
     "health-check": "node scripts/health-check.js",
-    "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh",
+    "postinstall": "echo 'Root package.json installed - no additional actions needed'"
   },
   "keywords": [
     "grocery",
@@ -38,9 +38,7 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "dependencies": {
-    "socket.io": "^4.8.1"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "repository": {
     "type": "git",

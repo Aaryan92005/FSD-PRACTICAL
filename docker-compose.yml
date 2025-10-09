@@ -10,6 +10,9 @@ services:
       MONGO_INITDB_DATABASE: grocery-erp
     ports:
       - "27017:27017"
+    labels:
+      - "com.docker.compose.service=mongodb"
+      - "com.docker.compose.project=grocery-erp"
     volumes:
       - mongodb_data:/data/db
       - ./mongodb-init:/docker-entrypoint-initdb.d
@@ -37,6 +40,12 @@ services:
       FRONTEND_URL: http://localhost:3000
     ports:
       - "5000:5000"
+    labels:
+      - "com.docker.compose.service=backend"
+      - "com.docker.compose.project=grocery-erp"
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
     depends_on:
       mongodb:
         condition: service_healthy
@@ -54,6 +63,12 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+    labels:
+      - "com.docker.compose.service=frontend"
+      - "com.docker.compose.project=grocery-erp"
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
     depends_on:
       - backend
     networks:
@@ -66,6 +81,9 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+    labels:
+      - "com.docker.compose.service=redis"
+      - "com.docker.compose.project=grocery-erp"
     volumes:
       - redis_data:/data
     networks:
@@ -83,6 +101,9 @@ services:
     restart: unless-stopped
     ports:
       - "8081:80"
+    labels:
+      - "com.docker.compose.service=nginx"
+      - "com.docker.compose.project=grocery-erp"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
