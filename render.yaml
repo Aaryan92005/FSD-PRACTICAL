@@ -1,0 +1,45 @@
+services:
+  # Backend API Service
+  - type: web
+    name: grocery-erp-backend
+    env: node
+    plan: free
+    buildCommand: cd grocery-erp-backend && npm install
+    startCommand: cd grocery-erp-backend && npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        value: mongodb+srv://aaryanshetye9:Aaryan92005@cluster1.kvcvjdf.mongodb.net/grocery-erp?retryWrites=true&w=majority&appName=Cluster1
+      - key: JWT_SECRET
+        value: grocery-erp-production-jwt-secret-2024-secure-key
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: grocery-erp-frontend
+          property: host
+
+  # Frontend Static Site
+  - type: web
+    name: grocery-erp-frontend
+    env: static
+    plan: free
+    buildCommand: cd grocery-erp-frontend && npm install && npm run build
+    staticPublishPath: grocery-erp-frontend/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: grocery-erp-backend
+          property: host
+
+# Using external MongoDB Atlas - no database service needed

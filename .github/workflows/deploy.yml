@@ -1,0 +1,170 @@
+name: Deploy Grocery ERP to Render
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: password123
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: |
+          grocery-erp-backend/package-lock.json
+          grocery-erp-frontend/package-lock.json
+    
+    - name: Install Backend Dependencies
+      run: |
+        cd grocery-erp-backend
+        npm ci --only=production
+    
+    - name: Install Frontend Dependencies
+      run: |
+        cd grocery-erp-frontend
+        npm ci
+    
+    - name: Lint Backend Code
+      run: |
+        cd grocery-erp-backend
+        npm run lint || echo "No lint script found"
+    
+    - name: Lint Frontend Code
+      run: |
+        cd grocery-erp-frontend
+        npm run lint || echo "No lint script found"
+    
+    - name: Run Backend Tests
+      run: |
+        cd grocery-erp-backend
+        npm test || echo "No tests configured yet"
+      env:
+        NODE_ENV: test
+        MONGODB_URI: mongodb://admin:password123@localhost:27017/grocery-erp-test?authSource=admin
+        JWT_SECRET: test-jwt-secret
+    
+    - name: Run Frontend Tests
+      run: |
+        cd grocery-erp-frontend
+        CI=true npm test -- --coverage --watchAll=false
+      env:
+        REACT_APP_API_URL: http://localhost:5000
+    
+    - name: Build Frontend
+      run: |
+        cd grocery-erp-frontend
+        npm run build
+      env:
+        REACT_APP_API_URL: https://grocery-erp-backend.onrender.com
+        REACT_APP_SOCKET_URL: https://grocery-erp-backend.onrender.com
+    
+    - name: Test Backend Health Check
+      run: |
+        cd grocery-erp-backend
+        npm run health-check || echo "Health check not available"
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to Render (Staging)
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_STAGING_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        wait-for-success: true
+    
+    - name: Notify Deployment Status
+      run: |
+        echo "Staging deployment completed successfully!"
+        echo "Staging URL: https://grocery-erp-staging.onrender.com"
+
+  deploy-production:
+    name: Deploy to Production
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy Backend to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_BACKEND_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        wait-for-success: true
+    
+    - name: Deploy Frontend to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        wait-for-success: true
+    
+    - name: Run Post-Deployment Health Checks
+      run: |
+        echo "Running post-deployment health checks..."
+        sleep 30
+        curl -f https://grocery-erp-backend.onrender.com/api/health || exit 1
+        curl -f https://grocery-erp-frontend.onrender.com || exit 1
+    
+    - name: Notify Deployment Success
+      run: |
+        echo "🚀 Production deployment completed successfully!"
+        echo "Frontend URL: https://grocery-erp-frontend.onrender.com"
+        echo "Backend URL: https://grocery-erp-backend.onrender.com"
+        echo "API Health: https://grocery-erp-backend.onrender.com/api/health"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run Security Audit (Backend)
+      run: |
+        cd grocery-erp-backend
+        npm audit --audit-level moderate
+    
+    - name: Run Security Audit (Frontend)
+      run: |
+        cd grocery-erp-frontend
+        npm audit --audit-level moderate

@@ -1,0 +1,602 @@
+{
+  "info": {
+    "name": "Grocery ERP API",
+    "description": "Complete API collection for Grocery ERP System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "apiVersion",
+      "value": "api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Samsung Galaxy S24\",\n  \"description\": \"Latest Samsung smartphone\",\n  \"sku\": \"SGS24-256GB\",\n  \"barcode\": \"9876543210987\",\n  \"category\": \"Electronics\",\n  \"price\": 899.99,\n  \"costPrice\": 700.00,\n  \"stock\": 25,\n  \"minStock\": 5,\n  \"maxStock\": 100,\n  \"unit\": \"piece\",\n  \"supplier\": \"Samsung\",\n  \"location\": \"Warehouse B\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PRODUCT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/search?q=Samsung&category=Electronics",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Samsung"
+                },
+                {
+                  "key": "category",
+                  "value": "Electronics"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by SKU",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/sku/SGS24-256GB",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", "sku", "SGS24-256GB"]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/low-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", "low-stock"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Update Product Stock",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stock\": 50,\n  \"operation\": \"set\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/products/:id/stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "products", ":id", "stock"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PRODUCT_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"zipCode\": \"10001\",\n    \"country\": \"USA\"\n  },\n  \"customerType\": \"retail\",\n  \"creditLimit\": 5000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/customers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "customers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "CUSTOMER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/customers/search/John",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "customers", "search", "John"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/customers/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "customers", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"CUSTOMER_ID_HERE\",\n  \"items\": [\n    {\n      \"productId\": \"PRODUCT_ID_HERE\",\n      \"quantity\": 2,\n      \"price\": 899.99\n    }\n  ],\n  \"paymentMethod\": \"credit_card\",\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"zipCode\": \"10001\",\n    \"country\": \"USA\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ORDER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Sales Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/sales-summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", "sales-summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Top Selling Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/top-selling",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", "top-selling"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shipped\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ORDER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Quick Sale",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"PRODUCT_ID_HERE\",\n      \"quantity\": 1,\n      \"price\": 899.99\n    }\n  ],\n  \"paymentMethod\": \"cash\",\n  \"customerName\": \"Walk-in Customer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/orders/quick-sale",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "orders", "quick-sale"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory"]
+            }
+          }
+        },
+        {
+          "name": "Create Inventory Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID_HERE\",\n  \"type\": \"in\",\n  \"quantity\": 100,\n  \"reason\": \"Initial stock\",\n  \"reference\": \"PO-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory"]
+            }
+          }
+        },
+        {
+          "name": "Get Inventory Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory/low-stock-alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory", "low-stock-alerts"]
+            }
+          }
+        },
+        {
+          "name": "Receive Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID_HERE\",\n  \"quantity\": 50,\n  \"supplier\": \"Samsung\",\n  \"reference\": \"PO-002\",\n  \"notes\": \"Monthly stock replenishment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory/receive",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory", "receive"]
+            }
+          }
+        },
+        {
+          "name": "Issue Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID_HERE\",\n  \"quantity\": 10,\n  \"reason\": \"Sale\",\n  \"reference\": \"ORDER-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory/issue",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory", "issue"]
+            }
+          }
+        },
+        {
+          "name": "Adjust Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID_HERE\",\n  \"quantity\": -5,\n  \"reason\": \"Damaged goods\",\n  \"notes\": \"Items damaged during transport\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/inventory/adjust",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "inventory", "adjust"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Get Me (Protected)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Logout (Protected)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
+

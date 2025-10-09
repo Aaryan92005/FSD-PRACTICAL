@@ -1,0 +1,51 @@
+# Render ignore file - files and directories to exclude from deployment
+
+# Development files
+.env.local
+.env.development
+*.log
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Dependencies (will be installed during build)
+node_modules/
+
+# Build artifacts (frontend will be built on Render)
+grocery-erp-frontend/build/
+grocery-erp-frontend/.eslintcache
+
+# Docker files (not needed for Render native builds)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Development tools
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (optional - remove if you want docs deployed)
+README.md
+DEPLOYMENT.md
+.github/
+
+# Local development scripts
+monitor.sh
+deploy.sh
