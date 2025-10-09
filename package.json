@@ -4,6 +4,9 @@
   "description": "Complete Grocery ERP System with React Frontend and Node.js Backend",
   "main": "index.js",
   "scripts": {
+    "install": "npm run install:all",
+    "build": "npm run build:frontend",
+    "start": "npm run start:frontend",
     "install:backend": "cd grocery-erp-backend && npm install",
     "install:frontend": "cd grocery-erp-frontend && npm install",
     "install:all": "npm run install:backend && npm run install:frontend",
