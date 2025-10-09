@@ -168,3 +168,4 @@ jobs:
       run: |
         cd grocery-erp-frontend
         npm audit --audit-level moderate
+

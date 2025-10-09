@@ -11,12 +11,14 @@ const customerSchema = new mongoose.Schema({
     type: String,
     trim: true,
     lowercase: true,
-    unique: true
+    unique: true,
+    sparse: true
   },
   phone: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
+    sparse: true
   },
   address: {
     street: String,
@@ -51,9 +53,7 @@ const customerSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes
-customerSchema.index({ email: 1 });
-customerSchema.index({ phone: 1 });
+// Only non-unique indexes (unique indexes are handled by schema)
 customerSchema.index({ status: 1 });
 
 // Static method to get stats

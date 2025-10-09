@@ -13,7 +13,7 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://aaryanshetye9:Aaryan92005@cluster1.kvcvjdf.mongodb.net/grocery-erp?retryWrites=true&w=majority&appName=Cluster1
+        value: mongodb+srv://aaryanshetye9:Aaryan92005@cluster1.kvcvjdf.mongodb.net/grocery-erp?retryWrites=true&w=majority
       - key: JWT_SECRET
         value: grocery-erp-production-jwt-secret-2024-secure-key
       - key: JWT_EXPIRES_IN

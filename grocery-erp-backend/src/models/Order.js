@@ -52,7 +52,8 @@ orderItemSchema.pre('save', function(next) {
 const orderSchema = new mongoose.Schema({
   orderNumber: {
     type: String,
-    unique: true
+    unique: true,
+    sparse: true
   },
   customer: {
     name: {
@@ -176,9 +177,7 @@ const orderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes for better query performance
-orderSchema.index({ orderNumber: 1 });
-orderSchema.index({ 'customer.email': 1 });
+// Only non-unique indexes (unique indexes are handled by schema)
 orderSchema.index({ 'customer.phone': 1 });
 orderSchema.index({ orderStatus: 1 });
 orderSchema.index({ paymentStatus: 1 });

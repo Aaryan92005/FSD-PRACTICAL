@@ -21,10 +21,8 @@ const healthRoutes = require('./src/routes/healthRoutes');
 const errorHandler = require('./src/middleware/errorHandler');
 const notFound = require('./src/middleware/notFound');
 
-// Env checks
-if (!process.env.MONGODB_URI) {
-  throw new Error('MONGODB_URI is not defined in environment variables');
-}
+// Import database configuration
+const { connectDB } = require('./config/database');
 // JWT not required for this project
 
 const app = express();
@@ -76,6 +74,25 @@ if (process.env.NODE_ENV === 'development') {
 // Handle preflight requests with proper CORS headers
 app.options('*', cors());
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Grocery ERP API is running',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    endpoints: {
+      health: '/api/health',
+      products: '/api/v1/products',
+      inventory: '/api/v1/inventory',
+      orders: '/api/v1/orders',
+      customers: '/api/v1/customers',
+      auth: '/api/v1/auth'
+    }
+  });
+});
+
 // Simple health check endpoint for backward compatibility
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -98,39 +115,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// MongoDB Connection with Atlas-specific configuration
-const connectDB = async () => {
-  try {
-    // MongoDB connection options optimized for Atlas
-    const options = {
-      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      maxPoolSize: 10 // Maintain up to 10 socket connections
-    };
-
-    const conn = await mongoose.connect(process.env.MONGODB_URI, options);
-    console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
-    console.log(`📊 Database: ${conn.connection.name}`);
-    
-    // Handle connection events
-    mongoose.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
-    
-    mongoose.connection.on('disconnected', () => {
-      console.log('⚠️ MongoDB disconnected');
-    });
-    
-    mongoose.connection.on('reconnected', () => {
-      console.log('✅ MongoDB reconnected');
-    });
-    
-  } catch (error) {
-    console.error('❌ Error connecting to MongoDB Atlas:', error.message);
-    console.error('🔍 Connection string format should be: mongodb+srv://username:password@cluster.mongodb.net/database');
-    process.exit(1);
-  }
-};
+// Database connection is now handled in config/database.js
 
 // Start server
 const PORT = process.env.PORT || 5000;

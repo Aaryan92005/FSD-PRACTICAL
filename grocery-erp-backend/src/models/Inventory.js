@@ -108,9 +108,8 @@ const inventorySchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes for better query performance
+// Indexes for better query performance (avoiding duplicate indexes)
 inventorySchema.index({ product: 1, createdAt: -1 });
-inventorySchema.index({ sku: 1 });
 inventorySchema.index({ transactionType: 1 });
 inventorySchema.index({ createdAt: -1 });
 inventorySchema.index({ performedBy: 1 });

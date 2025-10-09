@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema({
   sku: {
     type: String,
     unique: true,
+    sparse: true,
     trim: true,
     uppercase: true
   },
@@ -134,9 +135,7 @@ productSchema.virtual('profitMargin').get(function() {
   return ((this.price - this.costPrice) / this.costPrice * 100).toFixed(2);
 });
 
-// Indexes for better query performance
-productSchema.index({ sku: 1 });
-productSchema.index({ barcode: 1 });
+// Only non-unique indexes (unique indexes are handled by schema)
 productSchema.index({ category: 1 });
 productSchema.index({ status: 1 });
 productSchema.index({ name: 'text', description: 'text' });

@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Email is required'],
     unique: true,
+    sparse: true,
     trim: true,
     lowercase: true,
     match: [
@@ -107,8 +108,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes for better query performance
-userSchema.index({ email: 1 });
+// Only non-unique indexes (unique indexes are handled by schema)
 userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 
