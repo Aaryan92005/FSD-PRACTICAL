@@ -30,8 +30,9 @@ services:
     name: grocery-erp-frontend
     env: static
     plan: free
-    buildCommand: bash render-build-frontend.sh
-    staticPublishPath: grocery-erp-frontend/build
+    rootDir: grocery-erp-frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./build
     routes:
       - type: rewrite
         source: /*
@@ -42,5 +43,11 @@ services:
           type: web
           name: grocery-erp-backend
           property: host
+      - key: GENERATE_SOURCEMAP
+        value: false
+      - key: NODE_ENV
+        value: production
+      - key: CI
+        value: false
 
 # Using external MongoDB Atlas - no database service needed

@@ -1,29 +1,27 @@
 #!/bin/bash
+set -e
 
-# Render Frontend Build Script
 echo "Starting frontend build for Render deployment..."
-
-# Debug: Check current directory and structure
-echo "Current directory:"
-pwd
-echo "Directory contents:"
-ls -la
-echo "Looking for frontend directory..."
-find . -name "grocery-erp-frontend" -type d
 
 # Navigate to frontend directory
 cd grocery-erp-frontend
 
 # Install dependencies
 echo "Installing frontend dependencies..."
-npm install
+npm ci --only=production
 
-# Build the application
+# Build the application with production environment
 echo "Building React application..."
-npm run build
+REACT_APP_API_URL=$REACT_APP_API_URL npm run build
 
 # Verify build directory exists
-echo "Verifying build directory..."
-ls -la build/
+if [ -d "build" ]; then
+    echo "Build directory created successfully"
+    echo "Build contents:"
+    ls build/
+else
+    echo "ERROR: Build directory not found!"
+    exit 1
+fi
 
 echo "Frontend build completed successfully!"
