@@ -31,8 +31,8 @@ services:
     env: static
     plan: free
     rootDir: grocery-erp-frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: ./build
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
     routes:
       - type: rewrite
         source: /*
@@ -44,10 +44,10 @@ services:
           name: grocery-erp-backend
           property: host
       - key: GENERATE_SOURCEMAP
-        value: false
+        value: "false"
       - key: NODE_ENV
         value: production
       - key: CI
-        value: false
+        value: "false"
 
 # Using external MongoDB Atlas - no database service needed
